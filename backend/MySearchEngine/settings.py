@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from opensearchpy import OpenSearch
 from corsheaders.defaults import default_headers
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,17 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'j)_&(bmbw3h4#rq9jrtj_oy4pb^mo7^mqlnpiy0xj3ze!@erkn'
+SECRET_KEY = config('SECRET_KEY', default='j)_&(bmbw3h4#rq9jrtj_oy4pb^mo7^mqlnpiy0xj3ze!@erkn')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-if DEBUG:
-    DOMAIN = '127.0.0.1'
-    HOST_URL = 'http://'+DOMAIN+":8000"
-else:
-    DOMAIN = 'api.searchmyweb.in'
-    HOST_URL = 'https://'+DOMAIN
+DOMAIN = config('DOMAIN', default='127.0.0.1')
+HOST_URL = config('HOST_URL', default='http://127.0.0.1:8000')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -40,7 +37,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "X-AccessToken",
     "authtoken"
  ]
-
 
 ALLOWED_HOSTS = [DOMAIN]
 
@@ -96,35 +92,48 @@ WSGI_APPLICATION = 'MySearchEngine.wsgi.application'
 
 AUTH_USER_MODEL = "UserManagementApp.User"
 
-ELASTIC_SEARCH_OBJ = OpenSearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], verify_certs=True)
+# OpenSearch Configuration
+OPENSEARCH_HOST = config('OPENSEARCH_HOST', default='localhost')
+OPENSEARCH_PORT = config('OPENSEARCH_PORT', default=9200, cast=int)
+OPENSEARCH_SCHEME = config('OPENSEARCH_SCHEME', default='http')
+OPENSEARCH_VERIFY_CERTS = config('OPENSEARCH_VERIFY_CERTS', default=True, cast=bool)
 
-if DEBUG:
-    ELASTIC_SEARCH_OBJ = OpenSearch(
-        [{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], verify_certs=True)   
+ELASTIC_SEARCH_OBJ = OpenSearch([
+    {
+        'host': OPENSEARCH_HOST, 
+        'port': OPENSEARCH_PORT, 
+        'scheme': OPENSEARCH_SCHEME
+    }
+], verify_certs=OPENSEARCH_VERIFY_CERTS)
 
-ELASTICSEARCH_URL = "http://localhost:9200/"
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+ELASTICSEARCH_URL = config('OPENSEARCH_URL', default='http://localhost:9200/')
+
+# Database Configuration
+DB_ENGINE = config('DB_ENGINE', default='django.db.backends.postgresql_psycopg2')
+DB_NAME = config('DB_NAME', default='mywebsearch_2022_05_07')
+DB_USER = config('DB_USER', default='search_user')
+DB_PASSWORD = config('DB_PASSWORD', default='Search@143')
+DB_HOST = config('DB_HOST', default='localhost')
+DB_PORT = config('DB_PORT', default='5432')
 
 if not DEBUG:
-    # Sqlite Database Configuration
+    # Sqlite Database Configuration for production
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
 else:
-    # Postgres Database Configuration
+    # Postgres Database Configuration for development
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'mywebsearch_2022_05_07',
-            'USER': 'search_user',
-            'PASSWORD': 'Search@143',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': DB_ENGINE,
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
         }
     }
 
@@ -161,14 +170,11 @@ if not os.path.exists('files/deploy'):
     os.makedirs('files/deploy')
 
 APP_LOG_FILENAME = os.path.join(BASE_DIR, 'log/app.log')
-
 ERROR_LOG_FILENAME = os.path.join(BASE_DIR, 'log/error.log')
 
-LOGFILE_SIZE = 20 * 1024 * 1024
-
-LOGFILE_COUNT = 10
-
-USERMANAGEMENTAPP_LOGFILE = 'UserManagementApp'
+LOGFILE_SIZE = config('LOGFILE_SIZE', default=20971520, cast=int)  # 20MB
+LOGFILE_COUNT = config('LOGFILE_COUNT', default=10, cast=int)
+USERMANAGEMENTAPP_LOGFILE = config('USERMANAGEMENTAPP_LOGFILE', default='UserManagementApp')
 
 LOGGING = {
     'version': 1,
@@ -224,41 +230,32 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         }
-
     }
 }
 
-HEALTH_CHECK = ['CERTIFICATE', 'ELASTIC_SEARCH', 'POSTGRES']
+# Health Check Configuration
+HEALTH_CHECK = config('HEALTH_CHECK', default='CERTIFICATE,ELASTIC_SEARCH,POSTGRES', cast=Csv())
 
-MIT_WS_CERTIFICATE = "/etc/letsencrypt/live/searchmyweb.in/fullchain.pem"
-
-STATUS_TOKEN = "16060a30-413a-4325-88a1-10e2770c177e"
+# Security Configuration
+MIT_WS_CERTIFICATE = config('MIT_WS_CERTIFICATE', default='/etc/letsencrypt/live/searchmyweb.in/fullchain.pem')
+STATUS_TOKEN = config('STATUS_TOKEN', default='16060a30-413a-4325-88a1-10e2770c177e')
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
 MEDIA_URL = '/files/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files/')
-
 LOGIN_URL = '/login'
 
 CRONJOBS = [
