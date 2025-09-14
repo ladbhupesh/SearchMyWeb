@@ -13,6 +13,8 @@ from collections import Counter
 import sys
 import os
 from ip2geotools.databases.noncommercial import DbIpCity
+import time
+import random
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 # Create your views here.
@@ -260,12 +262,12 @@ class SearchQueryAPI(APIView):
                     device_type = "PC"
 
                 try:
-                    ip_to_geo = DbIpCity.get(client_ip, api_key='free')
-                    country = contry_shortname_map.get(ip_to_geo.country,"Unknown")
-                    city = ip_to_geo.city
-                    state = ip_to_geo.region
-                    latitude = ip_to_geo.latitude
-                    longitude = ip_to_geo.longitude
+                    geo_data = get_ip_geolocation(client_ip)
+                    country = contry_shortname_map.get(geo_data['country'], "Unknown")
+                    city = geo_data['city']
+                    state = geo_data['state']
+                    latitude = geo_data['latitude']
+                    longitude = geo_data['longitude']
                 except Exception as E:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     logger.error("RedirectUrl IP to geotools %s at %s",str(E), str(exc_tb.tb_lineno), extra=logger_extra)
@@ -532,12 +534,12 @@ class SelectSearchQueryAPI(APIView):
                     device_type = "PC"
 
                 try:
-                    ip_to_geo = DbIpCity.get(client_ip, api_key='free')
-                    country = contry_shortname_map.get(ip_to_geo.country,"Unknown")
-                    city = ip_to_geo.city
-                    state = ip_to_geo.region
-                    latitude = ip_to_geo.latitude
-                    longitude = ip_to_geo.longitude
+                    geo_data = get_ip_geolocation(client_ip)
+                    country = contry_shortname_map.get(geo_data['country'], "Unknown")
+                    city = geo_data['city']
+                    state = geo_data['state']
+                    latitude = geo_data['latitude']
+                    longitude = geo_data['longitude']
                 except Exception as E:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     logger.error("RedirectUrl IP to geotools %s at %s",str(E), str(exc_tb.tb_lineno), extra=logger_extra)

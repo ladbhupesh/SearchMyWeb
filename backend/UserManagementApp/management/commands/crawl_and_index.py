@@ -63,10 +63,14 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f'Starting crawl and index process with {crawl_workers} crawl workers '
+                f'Starting simultaneous crawl and index process with {crawl_workers} crawl workers '
                 f'and {index_workers} index workers'
             )
         )
+        
+        if crawl_only and index_only:
+            self.stdout.write(self.style.ERROR('Cannot specify both --crawl-only and --index-only'))
+            return
 
         if continuous:
             self.run_continuous(crawl_workers, index_workers, max_crawl_items, max_index_items, crawl_only, index_only)
@@ -80,21 +84,44 @@ class Command(BaseCommand):
         try:
             while True:
                 self.run_once(crawl_workers, index_workers, max_crawl_items, max_index_items, crawl_only, index_only)
-                time.sleep(5)
+                time.sleep(10)
         except KeyboardInterrupt:
             self.stdout.write(self.style.SUCCESS('\nStopped by user.'))
 
     def run_once(self, crawl_workers, index_workers, max_crawl_items, max_index_items, crawl_only, index_only):
-        """Run the crawl and index process once"""
+        """Run the crawl and index process once simultaneously"""
         start_time = time.time()
         
-        # Run crawling if not index-only
-        if not index_only:
-            self.run_crawling(crawl_workers, max_crawl_items)
+        # Create threads for simultaneous execution
+        crawl_thread = None
+        index_thread = None
         
-        # Run indexing if not crawl-only
+        # Start crawling thread if not index-only
+        if not index_only:
+            crawl_thread = threading.Thread(
+                target=self.run_crawling,
+                args=(crawl_workers, max_crawl_items),
+                name='CrawlThread'
+            )
+            crawl_thread.start()
+        
+        # Start indexing thread if not crawl-only
         if not crawl_only:
-            self.run_indexing(index_workers, max_index_items)
+            index_thread = threading.Thread(
+                target=self.run_indexing,
+                args=(index_workers, max_index_items),
+                name='IndexThread'
+            )
+            index_thread.start()
+        
+        # Wait for both threads to complete
+        if crawl_thread:
+            crawl_thread.join()
+            self.stdout.write(self.style.SUCCESS('Crawling thread completed'))
+        
+        if index_thread:
+            index_thread.join()
+            self.stdout.write(self.style.SUCCESS('Indexing thread completed'))
         
         end_time = time.time()
         self.stdout.write(

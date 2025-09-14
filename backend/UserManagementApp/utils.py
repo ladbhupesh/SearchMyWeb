@@ -205,7 +205,7 @@ def index_website(website_url_obj):
 
             # Doing Indexing in ElasticSearch
             settings.ELASTIC_SEARCH_OBJ.index(
-                index=username, id=int(website_url_obj.pk), document=data)
+                index=username, id=int(website_url_obj.pk), body=data)
 
         elif 'application/pdf' in content_type:
 
@@ -248,7 +248,7 @@ def index_website(website_url_obj):
                 data = json.load(read_file)
 
                 settings.ELASTIC_SEARCH_OBJ.index(
-                    index=username, id=int(website_url_obj.pk), document=data)
+                    index=username, id=int(website_url_obj.pk), body=data)
 
             except Exception as es:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
