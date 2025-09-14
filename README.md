@@ -55,7 +55,7 @@ SearchMyWeb/
 ### System Requirements
 - Python 3.8+
 - Node.js 14+
-- PostgreSQL 12+ (for development)
+- PostgreSQL 12+
 - OpenSearch 2.0+ (or Elasticsearch 8.0+)
 
 ### Development Tools
@@ -118,7 +118,6 @@ npm start
 - **[Backend README](backend/README.md)** - Django setup and API documentation
 - **[Frontend README](frontend/README.md)** - Angular setup and component documentation
 - **[Project Overview](PROJECT_OVERVIEW.md)** - Comprehensive system architecture
-- **[Environment Setup](backend/ENVIRONMENT_SETUP.md)** - Configuration guide
 
 ## �� Quick Setup
 

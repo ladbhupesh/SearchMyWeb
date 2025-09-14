@@ -7,7 +7,7 @@ Django-based backend API for the SearchMyWeb application, providing web crawling
 ### Technology Stack
 - **Framework**: Django 5.2.6
 - **API**: Django REST Framework 3.16.1
-- **Database**: PostgreSQL (dev) / SQLite (prod)
+- **Database**: PostgreSQL
 - **Search Engine**: OpenSearch 3.0.0
 - **Authentication**: Token-based + Session
 - **Task Scheduling**: APScheduler 3.11.0
@@ -44,7 +44,7 @@ backend/
 
 ### Prerequisites
 - Python 3.8+
-- PostgreSQL 12+ (for development)
+- PostgreSQL 12+ 
 - OpenSearch 2.0+ (or Elasticsearch 8.0+)
 - Virtual environment
 
@@ -108,32 +108,6 @@ OPENSEARCH_PORT=9200
 OPENSEARCH_SCHEME=http
 OPENSEARCH_VERIFY_CERTS=True
 STATUS_TOKEN=your-status-token
-```
-
-### Database Configuration
-
-**Development (PostgreSQL)**:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mywebsearch_db',
-        'USER': 'search_user',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
-
-**Production (SQLite)**:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 ```
 
 ### OpenSearch Configuration
@@ -372,7 +346,7 @@ STATUS_TOKEN=your-production-token
 ```
 
 ### Health Checks
-- **Database**: PostgreSQL/SQLite connectivity
+- **Database**: PostgreSQL connectivity
 - **OpenSearch**: Search engine connectivity
 - **Certificate**: SSL certificate validation
 - **Status endpoint**: `/api/status/`
