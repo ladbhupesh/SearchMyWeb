@@ -116,7 +116,7 @@ DB_PASSWORD = config('DB_PASSWORD', default='Search@143')
 DB_HOST = config('DB_HOST', default='localhost')
 DB_PORT = config('DB_PORT', default='5432')
 
-if not DEBUG:
+if DEBUG:
     # Sqlite Database Configuration for production
     DATABASES = {
         'default': {

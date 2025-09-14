@@ -22,7 +22,7 @@ A comprehensive web search and indexing platform built with Django and Angular. 
 
 ### Backend (Django)
 - **Framework**: Django 5.2.6 with Django REST Framework
-- **Database**: PostgreSQL (development) / SQLite (production)
+- **Database**: PostgreSQL
 - **Search Engine**: OpenSearch (formerly Elasticsearch)
 - **Authentication**: Token-based authentication with session support
 - **Task Scheduling**: APScheduler for background tasks
