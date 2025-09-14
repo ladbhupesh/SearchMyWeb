@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -96,10 +96,10 @@ WSGI_APPLICATION = 'MySearchEngine.wsgi.application'
 
 AUTH_USER_MODEL = "UserManagementApp.User"
 
-ELASTIC_SEARCH_OBJ = Elasticsearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], verify_certs=True)
+ELASTIC_SEARCH_OBJ = OpenSearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], verify_certs=True)
 
 if DEBUG:
-    ELASTIC_SEARCH_OBJ = Elasticsearch(
+    ELASTIC_SEARCH_OBJ = OpenSearch(
         [{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], verify_certs=True)   
 
 ELASTICSEARCH_URL = "http://localhost:9200/"

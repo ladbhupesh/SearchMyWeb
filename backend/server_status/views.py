@@ -104,7 +104,7 @@ def get_redis_info():
 
 def get_elasticsearch_info():
     """Check Elasticsearch connection."""
-    from elasticsearch import (
+    from opensearchpy import (
         Elasticsearch,
         ConnectionError as ESConnectionError
     )
@@ -114,7 +114,7 @@ def get_elasticsearch_info():
         return {"status": NO_CONFIG}
     start = datetime.now()
     try:
-        search = Elasticsearch(url, request_timeout=TIMEOUT_SECONDS)
+        search = OpenSearch(url, request_timeout=TIMEOUT_SECONDS)
         search.info()
     except ESConnectionError:
         return {"status": DOWN}

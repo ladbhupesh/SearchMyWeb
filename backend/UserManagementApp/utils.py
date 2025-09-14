@@ -313,8 +313,10 @@ class EasySearchCrawler:
                 domain = str(domain) + "." + str(suffix)
                 print(str(domain) in url)
                 if str(domain) in url:
+                    parsed_html = None
+                    url_title = '(NO TITLE)'
+                    
                     try:
-                        parsed_html = ""
                         url = url.lower()
                         response = requests.get(url, timeout=10.0)
                         raw_html = response.text
@@ -323,32 +325,37 @@ class EasySearchCrawler:
                         exc_type, exc_obj, exc_tb = sys.exc_info()
                         logger.error("EasySearchCrawler: get_url_list: %s at line no %s", str(
                             e), str(exc_tb.tb_lineno), extra=logger_extra)
+                        return  # Exit early if parsing fails
 
-                    url_title_item = parsed_html.xpath('//title')
-                    url_title = '(NO TITLE)'
-                    try:
-                        url_title = url_title_item[0].text
-                    except Exception:
-                        url_title = '(ERROR TITLE)'
+                    if parsed_html is not None:
+                        try:
+                            url_title_item = parsed_html.xpath('//title')
+                            if url_title_item and len(url_title_item) > 0:
+                                url_title = url_title_item[0].text or '(NO TITLE)'
+                        except Exception:
+                            url_title = '(ERROR TITLE)'
 
-                    self.visited_url[url] = url_title
+                        self.visited_url[url] = url_title
 
-                    for a_tag in parsed_html.xpath('//a'):
-                        raw_url = a_tag.get('href')
-                        if raw_url is None:
-                            continue
-                        parsed_url = urljoin(url, raw_url)
+                        try:
+                            for a_tag in parsed_html.xpath('//a'):
+                                raw_url = a_tag.get('href')
+                                if raw_url is None:
+                                    continue
+                                parsed_url = urljoin(url, raw_url)
 
-                        if str(domain) not in parsed_url:
-                            continue
-                        parsed_url_link = urlparse(parsed_url)
-                        parsed_url = parsed_url_link.scheme + "://" + parsed_url_link.netloc + parsed_url_link.path
-                        if parsed_url not in list(self.visited_url.keys()) and parsed_url not in self.queue_url:
-                            if str(website_url_obj.hyper_text).lower() == parsed_url_link.scheme:
-                                if parsed_url_link.netloc == urlparse(url).netloc:
-                                    self.queue_url.append(parsed_url)
-                                    create_websitelink(
-                                        website_url_obj, parsed_url, WebsiteLink)
+                                if str(domain) not in parsed_url:
+                                    continue
+                                parsed_url_link = urlparse(parsed_url)
+                                parsed_url = parsed_url_link.scheme + "://" + parsed_url_link.netloc + parsed_url_link.path
+                                if parsed_url not in list(self.visited_url.keys()) and parsed_url not in self.queue_url:
+                                    if str(website_url_obj.hyper_text).lower() == parsed_url_link.scheme:
+                                        if parsed_url_link.netloc == urlparse(url).netloc:
+                                            self.queue_url.append(parsed_url)
+                                            create_websitelink(
+                                                website_url_obj, parsed_url, WebsiteLink)
+                        except Exception as e:
+                            logger.error(f"Error processing links for {url}: {str(e)}", extra=logger_extra)
                 else:
                     logger.info("Ignoring this url: %s ", url, extra=logger_extra)
             else:
