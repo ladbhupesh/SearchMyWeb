@@ -1,0 +1,10 @@
+<div style="height:75vh;text-align: center;">
+    <div class="input-group mb-3 ml-lg-5">
+        <input type="date" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" #startDate>
+        <input type="date" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" #endDate>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" (click)="applyFilter(startDate,endDate)">Apply Filter</button>
+        </div>
+      </div>
+<canvas id="analytics-chart" height="40vh" width="90%"></canvas>
+</div>

@@ -1,0 +1,49 @@
+	<div class="limiter">
+	  <div class="container-login100">
+	    <div class="wrap-login100">
+	      <div class="login100-pic js-tilt" data-tilt>
+	        <img src="/assets/images/img-01.png" alt="IMG">
+	      </div>
+
+	      <div class="login100-form validate-form">
+	        <span class="login100-form-title">
+	          Member Login
+	        </span>
+
+	        <div *ngIf="errors.haserror" style="font-size:10px;border-radius:5px;margin:10px;padding:5px;"
+	          class="alert-danger text-center">
+	          {{errors.error}}
+	        </div>
+
+	        <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+	          <input class="input100" type="text" name="email" placeholder="Email or Username" #username>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]=fauser aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="wrap-input100 validate-input" data-validate="Password is required">
+	          <input class="input100" type="password" name="pass" placeholder="Password" #password>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]="faLock" aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="container-login100-form-btn">
+	          <button class="login100-form-btn" (click)="login(username,password)">
+	            Login
+	          </button>
+	        </div>
+
+	        <div class="text-center p-t-30">
+	          <a class="txt2" [routerLink]="['/signup']">
+	            Create your Account
+	            <fa-icon [icon]="falongarrowaltright" aria-hidden="true"></fa-icon>
+	          </a>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>

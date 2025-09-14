@@ -1,0 +1,57 @@
+<div class="wrapper d-flex align-items-stretch">
+  <nav id="sidebar" [ngClass]="is_active ? 'active' : ''">
+    <div class="custom-menu">
+      <button type="button" id="sidebarCollapse" class="btn btn-primary" (click)="toggleNavBar()">
+        <fa-icon [icon]=faBars aria-hidden="true"></fa-icon>
+        <span class="sr-only">Toggle Menu</span>
+      </button>
+    </div>
+    <div class="p-4 pt-5">
+      <ul class="list-unstyled components mb-5">
+        <li [ngClass]="check_path('/home') ? 'active':''">
+          <a [routerLink]="['/home']"> <fa-icon [icon]=faGaugeHigh aria-hidden="true" style="margin-right:10px"></fa-icon> Dashboard</a>
+        </li>
+        <li [ngClass]="check_path('/manage-indexes') ? 'active':''">
+          <a [routerLink]="['/manage-indexes']"> <fa-icon [icon]=faListCheck aria-hidden="true" style="margin-right:10px"></fa-icon> Manage indexes</a>
+        </li>
+        <li [ngClass]="check_path('/test-search') ? 'active':''">
+          <a [routerLink]="['/test-search']"> <fa-icon [icon]=faMagnifyingGlass aria-hidden="true" style="margin-right:10px"></fa-icon> Test Search</a>
+        </li>
+        <li [ngClass]="check_path('/select-search') ? 'active':''">
+          <a [routerLink]="['/select-search']"> <fa-icon [icon]=faHandPointer aria-hidden="true" style="margin-right:10px"></fa-icon> Select Search</a>
+        </li>
+        <li [ngClass]="check_path('/trafic-sources') ? 'active':''">
+          <a [routerLink]="['/trafic-sources']"> <fa-icon [icon]=faChartArea aria-hidden="true" style="margin-right:10px"></fa-icon> Traffic Sources</a>
+        </li>
+        <li [ngClass]="check_path('/statewise-traffic') ? 'active':''">
+          <a [routerLink]="['/statewise-traffic']"> <fa-icon [icon]=faEarthAsia aria-hidden="true" style="margin-right:10px"></fa-icon> State Wise Traffic</a>
+        </li>
+        <li [ngClass]="check_path('/analytics') ? 'active':''">
+          <a [routerLink]="['/analytics']"> <fa-icon [icon]=faChartLine aria-hidden="true" style="margin-right:10px"></fa-icon> Analytics</a>
+        </li>
+        <li [ngClass]="check_path('/wordcloud') ? 'active':''">
+          <a [routerLink]="['/wordcloud']"> <fa-icon [icon]=faCloud aria-hidden="true" style="margin-right:10px"></fa-icon> Wordcloud</a>
+        </li>
+        <li [ngClass]="check_path('/live-logger') ? 'active':''">
+          <a [routerLink]="['/live-logger']"> <fa-icon [icon]=faFileLines aria-hidden="true" style="margin-right:10px"></fa-icon> Live Logger</a>
+        </li>
+        <li>
+          <span (click)="logout()"> <fa-icon [icon]=faRightFromBracket aria-hidden="true" style="margin-right:10px"></fa-icon> Logout</span>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5 pt-5">
+    <app-list-all-urls *ngIf="check_path('/home')"></app-list-all-urls>
+    <app-manage-indexes *ngIf="check_path('/manage-indexes')"></app-manage-indexes>
+    <app-test-search *ngIf="check_path('/test-search')"></app-test-search>
+    <app-select-search *ngIf="check_path('/select-search')"></app-select-search>
+    <app-traffic-sources *ngIf="check_path('/trafic-sources')"></app-traffic-sources>
+    <app-statewise-traffic-sources *ngIf="check_path('/statewise-traffic')"></app-statewise-traffic-sources>
+    <app-analytics *ngIf="check_path('/analytics')"></app-analytics>
+    <app-wordcloud *ngIf="check_path('/wordcloud')"></app-wordcloud>
+    <app-livelogger *ngIf="check_path('/live-logger')"></app-livelogger>
+  </div>
+</div>

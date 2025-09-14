@@ -1,0 +1,60 @@
+	<div class="limiter">
+	  <div class="container-login100">
+	    <div class="wrap-login100">
+	      <div class="login100-pic js-tilt" data-tilt>
+	        <img src="/assets/images/img-01.png" alt="IMG">
+	      </div>
+
+	      <div class="login100-form validate-form">
+	        <span class="login100-form-title">
+	          Member Signup
+	        </span>
+
+	        <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+	          <input class="input100" type="text" name="username" placeholder="Username" #username>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]=fauser aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+	          <input class="input100" type="email" name="email" placeholder="Email" #email>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]=faenvelope aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="wrap-input100 validate-input" data-validate="Password is required">
+	          <input class="input100" type="password" name="pass" placeholder="Password" #password>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]="faLock" aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="wrap-input100 validate-input" data-validate="Password is required">
+	          <input class="input100" type="password" name="pass" placeholder="Password" #password2>
+	          <span class="focus-input100"></span>
+	          <span class="symbol-input100">
+	            <fa-icon [icon]="faLock" aria-hidden="true"></fa-icon>
+	          </span>
+	        </div>
+
+	        <div class="container-login100-form-btn">
+	          <button class="login100-form-btn" (click)="signup(username,email,password,password2)">
+	            SignUp
+	          </button>
+	        </div>
+
+	        <div class="text-center p-t-30">
+	          <a class="txt2" [routerLink]="['/login']">
+	            Already user? login 
+	            <fa-icon [icon]="falongarrowaltright" aria-hidden="true"></fa-icon>
+	          </a>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>

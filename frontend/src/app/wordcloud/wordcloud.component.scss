@@ -1,0 +1,17 @@
+div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#count-display{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    height: 30px;
+}
+
+#wordcloud-canvas{
+    border: 2px solid black;
+    border-radius: 20px;
+}
